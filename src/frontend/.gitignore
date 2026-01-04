@@ -21,7 +21,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
+.vite/
 
 pnpm-lock.yaml
 yarn.lock
