@@ -69,6 +69,14 @@ const init = () =>
 
 const key = "RATED_VIDEOS";
 
+function removeFromCategory(data: VideoCategories, bv: string) {
+  for (const [, records] of Object.entries(data)) {
+    delete records[bv];
+  }
+
+  return Object.assign({}, data);
+}
+
 function setBvToCategory(
   data: VideoCategories,
   category: string,
@@ -99,9 +107,26 @@ function set(value: VideoCategories) {
   return value;
 }
 
-function VideoCard({ video }: { video: VideoParseResult }) {
+function VideoCard({
+  video,
+  setRate,
+  rate,
+  bv,
+}: {
+  bv: string;
+  video: VideoParseResult;
+  setRate: (rates: VideoCategories) => void;
+  rate: VideoCategories;
+}) {
+  function removeVideo() {
+    setRate(set(removeFromCategory(rate, bv)));
+  }
+
   return (
-    <div className="overflow-hidden border h-full w-50 rounded-sm">
+    <div className="overflow-hidden border h-full w-50 rounded-sm hover:[&>button]:visible">
+      <Button isIconOnly className="fixed invisible mr-0" onPress={removeVideo}>
+        X
+      </Button>
       <Tooltip>
         <a className="h-full" href={video.url} rel="noreferrer" target="_blank">
           <div className="overflow-hidden ">
@@ -117,9 +142,13 @@ function VideoCard({ video }: { video: VideoParseResult }) {
 function Rating({
   title,
   videos,
+  setRate,
+  rate,
 }: {
   title: string;
   videos: { [bv: string]: VideoParseResult };
+  setRate: (rates: VideoCategories) => void;
+  rate: VideoCategories;
 }) {
   return (
     <div className="min-h-30 h-40 flex flex-row justify-start align-middle items-center border">
@@ -130,7 +159,13 @@ function Rating({
       </div>
       <div className="h-full w-full">
         {Object.entries(videos).map(([bv, video]) => (
-          <VideoCard key={bv} video={video} />
+          <VideoCard
+            key={bv}
+            bv={bv}
+            rate={rate}
+            setRate={setRate}
+            video={video}
+          />
         ))}
       </div>
     </div>
@@ -203,7 +238,13 @@ export default function VideoRating() {
         <div className="w-full">
           {rate ? (
             Object.entries(rate).map(([title, videos]) => (
-              <Rating key={title} title={title} videos={videos} />
+              <Rating
+                key={title}
+                rate={rate}
+                setRate={setRate}
+                title={title}
+                videos={videos}
+              />
             ))
           ) : (
             <div>Loading...</div>
