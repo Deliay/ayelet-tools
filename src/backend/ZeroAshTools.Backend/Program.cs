@@ -15,7 +15,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddCors(cors =>
 {
     cors.AddPolicy("trust-sites", (policy) => policy
-        .WithOrigins("https://tools.ayelet.cn", "http://localhost:5173"));
+        .WithOrigins("https://tools.ayelet.cn", "https://tools.zeroash.cn", "http://localhost:5173"));
 });
 
 var app = builder.Build();
