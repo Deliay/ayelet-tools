@@ -141,7 +141,7 @@ function VideoCard({
   return (
     <div
       ref={setNodeRef}
-      className="overflow-hidden h-40 min-w-40 w-40 hover:[&>button]:visible"
+      className="overflow-hidden h-40 min-w-60 w-60 hover:[&>button]:visible"
       style={{
         transform: CSS.Translate.toString(transform),
       }}
@@ -164,9 +164,11 @@ function VideoCard({
           className="object-cover min-h-40"
           src={video.image}
         />
-        <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+        <CardFooter className="justify-between bg-black/75 before:bg-black/75 overflow-hidden py-1 absolute before:rounded-t-sm rounded-t-sm bottom-0 w-full z-10">
           <a href={video.url} rel="noreferrer" target="_blank">
-            <span className="text-tiny text-black/75">{video.title}</span>
+            <span className="text-tiny text-white overflow-hidden text-ellipsis whitespace-nowrap">
+              {video.title}
+            </span>
           </a>
         </CardFooter>
       </Card>
@@ -295,13 +297,13 @@ export default function VideoRating() {
           <div className="w-full flex justify-center pb-4">
             <div className="flex justify-center items-start align-baseline w-1/2 gap-2">
               <Input
-                className="w-60"
+                className="w-60 min-w-32"
                 placeholder="输入BV号"
                 value={bv}
                 onValueChange={handleBvChange}
               />
               <Select
-                className="max-w-32"
+                className="max-w-32 min-w-24"
                 items={Object.keys(color).map((key) => ({ key, label: key }))}
                 selectedKeys={new Set([category])}
                 selectionMode="single"
