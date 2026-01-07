@@ -219,7 +219,7 @@ function Rating({
 }
 
 function tryGetBv(str: string) {
-  const result = /\/(BV.*?)(\/|$)/gm.exec(str);
+  const result = /\/(BV.*?)(\/|$|\?)/gm.exec(str);
 
   if (result) return result[1];
 
