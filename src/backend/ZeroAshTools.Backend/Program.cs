@@ -62,29 +62,10 @@ _ = IntervalFlushCacheAsync();
 
 app.Run();
 
-async ValueTask<T> BeginBvScopeAsync<T>(string bv, Func<ValueTask<T>> scope)
-{
-    await _lock.WaitAsync(cancellationToken);
-    try
-    {
-        if (!_locks.TryGetValue(bv, out var bvLock))
-            _locks.Add(bv, new SemaphoreSlim(1));
-    }
-    finally
-    {
-        _lock.Release();
-    }
-
-    await _locks[bv].WaitAsync(cancellationToken);
-    try
-    {
-        return await scope();
-    }
-    finally
-    {
-        _locks[bv].Release();
-    }
-}
+const string CacheFilePath = "data/cache.json";
+const string CacheFileTempPath = "data/cache.json.1";
+const string CacheFileBackPath = "data/cache.json.bak";
+return;
 
 async ValueTask<VideoParseResult> GetBvFromBilibiliAsync(string bv)
 {
@@ -113,10 +94,29 @@ async ValueTask<VideoParseResult> GetBvAsync(string bv)
     });
 }
 
+async ValueTask<T> BeginBvScopeAsync<T>(string bv, Func<ValueTask<T>> scope)
+{
+    await _lock.WaitAsync(cancellationToken);
+    try
+    {
+        if (!_locks.TryGetValue(bv, out var bvLock))
+            _locks.Add(bv, new SemaphoreSlim(1));
+    }
+    finally
+    {
+        _lock.Release();
+    }
 
-const string CacheFilePath = "data/cache.json";
-const string CacheFileTempPath = "data/cache.json.1";
-const string CacheFileBackPath = "data/cache.json.bak";
+    await _locks[bv].WaitAsync(cancellationToken);
+    try
+    {
+        return await scope();
+    }
+    finally
+    {
+        _locks[bv].Release();
+    }
+}
 
 async Task IntervalFlushCacheAsync()
 {
