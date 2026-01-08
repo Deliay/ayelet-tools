@@ -13,8 +13,13 @@ export default function TopNavbar() {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="/video-rating">
             视频从夯到拉
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="/lol-dice">
+            LOL大乱斗骰子
           </Link>
         </NavbarItem>
       </NavbarContent>
