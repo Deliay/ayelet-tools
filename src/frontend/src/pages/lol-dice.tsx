@@ -69,11 +69,8 @@ function generateHeroIds(heroMap: lol.HeroMap, selectedHeroIds: number[]) {
     .filter((id) => !unavailableAllHeroIds.has(id));
 
   // randomize pick 12 heroes from full list
-  const { remain: remainHeroIds, picked: pickedHeroIds } = pickRamdom(
-    availableHeroIds,
-    12,
-  );
-  const pickedHeroIdsSet = new Set(pickedHeroIds);
+  const { picked: pickedHeroIds } = pickRamdom(availableHeroIds, 12);
+  // const pickedHeroIdsSet = new Set(pickedHeroIds);
 
   // pick 3 heroes from free list
   const unavailableFreeHeroIds = new Set([
