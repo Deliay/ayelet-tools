@@ -1,6 +1,7 @@
 using Mikibot.Crawler.Http.Bilibili;
 using ZeroAshTools.Backend.Data;
 using ZeroAshTools.Backend.Service;
+using ZeroAshTools.Backend.Service.Bangumi;
 using ZeroAshTools.Backend.Service.Bilibili;
 using ZeroAshTools.Backend.Service.LastFm;
 
@@ -12,6 +13,7 @@ if (!Directory.Exists("data"))
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Services.AddBilibiliProvider();
 builder.Services.AddLastfmProvider();
+builder.Services.AddBangumiTvProvider();
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
@@ -73,4 +75,11 @@ lastfmApi.MapGet("/tracks/{mbid}/cover", async (string mbid, CancellationToken c
     return Results.Ok(cover);
 }).RequireCors("trust-sites");
 
+var bangumiApi = app.MapGroup("/api/v1/bangumi");
+var bangumiProvider = app.Services.GetRequiredService<BangumiTvProvider>();
+bangumiApi.MapGet("/subject/{term}", async (string term, CancellationToken cancellationToken) =>
+{
+    var result = await bangumiProvider.Search(term, cancellationToken);
+    return Results.Ok(result);
+}).RequireCors("trust-sites");
 app.Run();
