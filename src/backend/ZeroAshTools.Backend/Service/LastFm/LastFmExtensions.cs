@@ -20,6 +20,8 @@ public static class LastFmExtensions
 
             registry.AddSingleton<LastfmClient>();
 
+            registry.AddCache<LastFmSongCoverProvider>();
+            
             return registry;
         }
     }

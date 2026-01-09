@@ -54,12 +54,23 @@ bilibiliApi.MapGet("/cover/{bv}", async (string bv, CancellationToken cancellati
 
 var lastfmApi = app.MapGroup("/api/v1/lastfm");
 var lastfmProvider = app.Services.GetRequiredService<LastFmInfoProvider>();
-lastfmApi.MapGet("/tracks/{term}",
-    async (string term, CancellationToken cancellationToken) =>
-        Results.Ok(await lastfmProvider.SearchSongs(term, 1, cancellationToken)));
+var lastfmCoverProvider = app.Services.GetRequiredService<LastFmSongCoverProvider>();
+lastfmApi.MapGet("/tracks/{term}", async (string term, CancellationToken cancellationToken) =>
+{
+    var searchSongs = await lastfmProvider.SearchSongs(term, 1, cancellationToken);
+    return Results.Ok(searchSongs);
+}).RequireCors("trust-sites");
 
-lastfmApi.MapGet("/artist/{term}",
-    async (string term, CancellationToken cancellationToken) =>
-        Results.Ok(await lastfmProvider.SearchArtist(term, 1, cancellationToken)));
+lastfmApi.MapGet("/artist/{term}", async (string term, CancellationToken cancellationToken) =>
+{
+    var searchArtist = await lastfmProvider.SearchArtist(term, 1, cancellationToken);
+    return Results.Ok(searchArtist);
+}).RequireCors("trust-sites");
+
+lastfmApi.MapGet("/tracks/{mbid}/cover", async (string mbid, CancellationToken cancellationToken) =>
+{
+    var cover = await lastfmCoverProvider.GetAsync(mbid, cancellationToken);
+    return Results.Ok(cover);
+}).RequireCors("trust-sites");
 
 app.Run();
