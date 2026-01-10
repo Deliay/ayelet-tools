@@ -11,7 +11,7 @@ const colors: Record<string, string> = {
   人上人: "bg-[#ffd24b]",
   NPC: "bg-[#fedf82]",
   拉: "bg-[#aeadad]",
-  拉完了: "bg-[#ffffff]",
+  拉完了: "bg-[#e2e2e2]",
 };
 
 export default function RateTable() {
@@ -34,7 +34,7 @@ export default function RateTable() {
 
   return (
     <DndContext onDragEnd={handleDrag}>
-      <div className="w-full border border-white/50 rounded-2xl overflow-hidden">
+      <div className="w-full border border-white/50 in-light:border-black/50 rounded-2xl overflow-hidden">
         {Object.keys(rates).map((category) => (
           <RateLine
             key={category}

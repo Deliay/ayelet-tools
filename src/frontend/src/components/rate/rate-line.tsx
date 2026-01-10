@@ -21,7 +21,7 @@ export default function RateLine({
       ref={setNodeRef}
       className={clsx(
         "grid grid-flow-col justify-start align-middle items-center",
-        isOver ? "bg-white/30" : "",
+        isOver ? "bg-white/30 in-light:bg-black/30" : "",
       )}
       id={category}
     >
